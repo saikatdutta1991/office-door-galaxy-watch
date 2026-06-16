@@ -1,9 +1,12 @@
-# HelloWatch — Galaxy Watch 4 Hello World
+# Office Door — Galaxy Watch 4 Unlock
 
-A minimal Wear OS app: one **Click** button that pops a "Hello World" toast.
+A minimal Wear OS app: one full-screen circular **UNLOCK** button. Tapping it
+POSTs to the unlock API, then flashes the screen **green ×3** on success or
+**red ×3** on failure.
 
 - UI: Jetpack Compose for Wear OS
-- Target: Galaxy Watch 4 (Wear OS 3, `minSdk 30`)
+- Target: Galaxy Watch 4 (Wear OS 3, `minSdk 30`), circular dial
+- Network: `POST` to `https://closing-skink-socially.ngrok-free.app/unlock/`
 - Built in GitHub Codespaces (no Android Studio needed)
 
 ## Build in Codespaces
@@ -43,7 +46,8 @@ You need `adb` locally (comes with Android Studio platform-tools, or `brew insta
    ```
 
    Accept the pairing/debug prompt on the watch when it appears.
-5. Launch **HelloWatch** from the watch app list. Tap **Click** → "Hello World".
+5. Launch **HelloWatch** from the watch app list. Tap **UNLOCK** → the screen
+   flashes green (success) or red (failure).
 
 ## Project layout
 

@@ -49,5 +49,8 @@ dependencies {
     implementation("androidx.wear.compose:compose-material:1.4.0")
     implementation("androidx.wear.compose:compose-foundation:1.4.0")
 
+    // Coroutines for the network call
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
