@@ -1,0 +1,18 @@
+{
+    "name": "Wear OS Android Build",
+    "image": "mcr.microsoft.com/devcontainers/java:17",
+    "postCreateCommand": "bash .devcontainer/setup.sh",
+    "remoteEnv": {
+        "ANDROID_HOME": "/usr/local/android-sdk",
+        "ANDROID_SDK_ROOT": "/usr/local/android-sdk",
+        "PATH": "${containerEnv:PATH}:/usr/local/android-sdk/cmdline-tools/latest/bin:/usr/local/android-sdk/platform-tools"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "vscjava.vscode-java-pack",
+                "fwcd.kotlin"
+            ]
+        }
+    }
+}
