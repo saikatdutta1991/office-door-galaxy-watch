@@ -7,7 +7,8 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@android:drawable/ic_dialog_info"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="HelloWatch"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.DeviceDefault">
@@ -32,14 +33,14 @@
             android:name=".UnlockTileService"
             android:exported="true"
             android:label="Unlock Door"
-            android:icon="@android:drawable/ic_lock_idle_lock"
+            android:icon="@mipmap/ic_launcher"
             android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
             <intent-filter>
                 <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER" />
             </intent-filter>
             <meta-data
                 android:name="androidx.wear.tiles.PREVIEW"
-                android:resource="@android:drawable/ic_lock_idle_lock" />
+                android:resource="@mipmap/ic_launcher" />
         </service>
     </application>
 
