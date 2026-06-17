@@ -1,6 +1,7 @@
 package com.example.hellowatch
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.animateColorAsState
@@ -137,7 +138,13 @@ private suspend fun flash(color: Color, setColor: (Color) -> Unit) {
     }
 }
 
-/** Fires the unlock POST request. Returns true on a 2xx response. */
+/**
+ * Fires the unlock POST request. Returns true when the server accepted it.
+ *
+ * Treats any non-error status (2xx success or 3xx redirect) as success: the door
+ * controller often answers a POST with a redirect (Post/Redirect/Get), which is
+ * still a successful unlock. Only network failures and 4xx/5xx count as failure.
+ */
 private suspend fun sendUnlockRequest(): Boolean = withContext(Dispatchers.IO) {
     var connection: HttpURLConnection? = null
     try {
@@ -145,17 +152,22 @@ private suspend fun sendUnlockRequest(): Boolean = withContext(Dispatchers.IO) {
             requestMethod = "POST"
             connectTimeout = 10_000
             readTimeout = 10_000
+            instanceFollowRedirects = true
             setRequestProperty(
                 "User-Agent",
                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " +
                     "(KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
             )
             setRequestProperty("Referer", "https://192.168.0.27:8080/")
-            doOutput = true
+            // ngrok free tier shows a browser-warning interstitial for browser UAs;
+            // this header tells it to pass the request straight through.
+            setRequestProperty("ngrok-skip-browser-warning", "true")
         }
         val code = connection.responseCode
-        code in 200..299
+        Log.d("UnlockDoor", "Unlock response code: $code")
+        code in 200..399
     } catch (e: Exception) {
+        Log.e("UnlockDoor", "Unlock request failed", e)
         false
     } finally {
         connection?.disconnect()
