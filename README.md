@@ -46,7 +46,7 @@ You need `adb` locally (comes with Android Studio platform-tools, or `brew insta
    ```
 
    Accept the pairing/debug prompt on the watch when it appears.
-5. Launch **HelloWatch** from the watch app list. Tap **UNLOCK** → the screen
+5. Launch **Unlock Door** from the watch app list. Tap **UNLOCK** → the screen
    flashes green (success) or red (failure).
 
 ## Add the Tile (quick access from the watch face)
