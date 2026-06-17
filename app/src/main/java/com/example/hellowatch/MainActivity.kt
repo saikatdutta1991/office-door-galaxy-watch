@@ -150,8 +150,8 @@ private suspend fun sendUnlockRequest(): Boolean = withContext(Dispatchers.IO) {
     try {
         connection = (URL(UNLOCK_URL).openConnection() as HttpURLConnection).apply {
             requestMethod = "POST"
-            connectTimeout = 10_000
-            readTimeout = 10_000
+            connectTimeout = 30_000
+            readTimeout = 30_000
             instanceFollowRedirects = true
             setRequestProperty(
                 "User-Agent",
