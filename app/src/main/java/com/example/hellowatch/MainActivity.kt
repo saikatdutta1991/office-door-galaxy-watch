@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,19 +42,29 @@ private val FlashGreen = Color(0xFF22C55E)
 private val FlashRed = Color(0xFFEF4444)
 private val ScreenBlack = Color(0xFF000000)
 
+/** Intent extra: when true the screen unlocks immediately and closes afterward (tile tap). */
+const val EXTRA_AUTO_UNLOCK = "auto_unlock"
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val autoUnlock = intent?.getBooleanExtra(EXTRA_AUTO_UNLOCK, false) ?: false
         setContent {
             MaterialTheme {
-                UnlockScreen()
+                UnlockScreen(
+                    autoUnlock = autoUnlock,
+                    onAutoComplete = { finish() }
+                )
             }
         }
     }
 }
 
 @Composable
-fun UnlockScreen() {
+fun UnlockScreen(
+    autoUnlock: Boolean = false,
+    onAutoComplete: () -> Unit = {}
+) {
     val scope = rememberCoroutineScope()
 
     // Target background color the screen animates toward. Flashing toggles this.
@@ -66,16 +77,10 @@ fun UnlockScreen() {
         label = "background"
     )
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(animatedBackground),
-        contentAlignment = Alignment.Center
-    ) {
-        Button(
-            enabled = !isBusy,
-            onClick = {
-                if (isBusy) return@Button
+    // Runs the unlock + flash; when [thenComplete] the activity closes after the flash.
+    val runUnlock: (Boolean) -> Unit = remember {
+        { thenComplete ->
+            if (!isBusy) {
                 isBusy = true
                 scope.launch {
                     val success = sendUnlockRequest()
@@ -84,8 +89,26 @@ fun UnlockScreen() {
                     }
                     backgroundColor = ScreenBlack
                     isBusy = false
+                    if (thenComplete) onAutoComplete()
                 }
-            },
+            }
+        }
+    }
+
+    // Tile launch: fire once on first composition.
+    LaunchedEffect(Unit) {
+        if (autoUnlock) runUnlock(true)
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(animatedBackground),
+        contentAlignment = Alignment.Center
+    ) {
+        Button(
+            enabled = !isBusy,
+            onClick = { runUnlock(false) },
             colors = ButtonDefaults.primaryButtonColors(
                 backgroundColor = ButtonBlue,
                 contentColor = Color.White
@@ -95,7 +118,7 @@ fun UnlockScreen() {
                 .padding(8.dp)
         ) {
             Text(
-                text = "UNLOCK\nDOOR",
+                text = "UNLOCK\n\nDOOR",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center

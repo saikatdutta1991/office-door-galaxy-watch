@@ -52,5 +52,11 @@ dependencies {
     // Coroutines for the network call
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 
+    // Wear OS Tiles (quick-access button from the tiles carousel)
+    implementation("androidx.wear.tiles:tiles:1.4.1")
+    implementation("androidx.wear.protolayout:protolayout:1.2.1")
+    implementation("androidx.wear.protolayout:protolayout-material:1.2.1")
+    implementation("com.google.guava:guava:33.4.0-android")
+
     debugImplementation("androidx.compose.ui:ui-tooling")
 }

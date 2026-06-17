@@ -49,6 +49,17 @@ You need `adb` locally (comes with Android Studio platform-tools, or `brew insta
 5. Launch **HelloWatch** from the watch app list. Tap **UNLOCK** → the screen
    flashes green (success) or red (failure).
 
+## Add the Tile (quick access from the watch face)
+
+So you don't have to open the app from the menu each time:
+
+1. From the watch face, **swipe left** to the tiles carousel.
+2. Swipe to the end and tap **+** (Add tile).
+3. Pick **Unlock Door** from the list.
+
+Now a swipe from the watch face shows the UNLOCK DOOR button. Tapping it fires
+the unlock request, flashes green/red x3, and returns to the tile automatically.
+
 ## Project layout
 
 ```
